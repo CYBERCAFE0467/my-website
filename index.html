@@ -1,163 +1,53 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ग्राहक सेवा फ़ॉर्म</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 20px;
-            text-align: center;
-        }
-        
-        .form-container {
-            display: inline-block;
-            padding: 20px;
-            background-color: white;
-            border: 4px double #000; /* डबल बॉर्डर */
-            border-radius: 10px;
-            width: 600px;
-            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        h2 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        label {
-            font-weight: bold;
-            display: block;
-            margin: 10px 0 5px;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 10px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        button {
-            width: 100%;
-            background-color: #28a745;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        
-        button:hover {
-            background-color: #218838;
-        }
-        
-        .search-container {
-            margin-top: 20px;
-        }
-        
-        #searchResults {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
-            border: 2px solid #000;
-            background-color: #fff;
-            text-align: left;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>धन्यवाद</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background: #ffffff;
+      color: #333;
+    }
+    .thankyou-box {
+      max-width: 500px;
+      margin: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: green;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 16px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    a:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="form-container">
-        <h2>ग्राहक सेवा फ़ॉर्म</h2>
-        <form id="customerForm">
-            <label>ग्राहक का नाम:</label>
-            <input type="text" id="name" required>
-
-            <label>मोबाइल नंबर:</label>
-            <input type="tel" id="mobile" required>
-
-            <label>पता:</label>
-            <input type="text" id="address">
-
-            <label>सेवा का प्रकार:</label>
-            <input type="text" id="serviceType" required>
-
-            <label>सेवा शुल्क (₹):</label>
-            <input type="number" id="serviceCharge" required>
-
-            <label>जमा राशि (₹):</label>
-            <input type="number" id="paidAmount" required oninput="calculateBalance()">
-
-            <label>शेष राशि (₹):</label>
-            <input type="number" id="balanceAmount" readonly>
-
-            <label>रिमार्क (टिप्पणी):</label>
-            <textarea id="remark" rows="2"></textarea>
-
-            <button type="button" onclick="submitForm()">सबमिट करें</button>
-        </form>
-    </div>
- <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw1XBj5KYxKPxK_ixSsk3Y-mS7qc5NtaI09sKoslDegjzIgF2_4I3Xaan0BYaDDj_s4/exec";
-
-        function calculateBalance() {
-            let serviceCharge = parseFloat(document.getElementById("serviceCharge").value) || 0;
-            let paidAmount = parseFloat(document.getElementById("paidAmount").value) || 0;
-            let balance = serviceCharge - paidAmount;
-            document.getElementById("balanceAmount").value = balance;
-        }
-
-        function submitForm() {
-            let formData = {
-                name: document.getElementById("name").value,
-                mobile: document.getElementById("mobile").value,
-                address: document.getElementById("address").value,
-                serviceType: document.getElementById("serviceType").value,
-                serviceCharge: document.getElementById("serviceCharge").value,
-                paidAmount: document.getElementById("paidAmount").value,
-                balanceAmount: document.getElementById("balanceAmount").value,
-                remark: document.getElementById("remark").value
-            };
-
-            let queryString = new URLSearchParams(formData).toString();
-            fetch(scriptURL + "?action=save&" + queryString)
-            .then(response => response.text())
-            .then(data => alert("डेटा सफलतापूर्वक सेव हो गया!"))
-            .catch(error => alert("त्रुटि: " + error));
-        }
-
-        function searchData() {
-            let query = document.getElementById("searchQuery").value;
-            if (!query) {
-                alert("कृपया नाम या मोबाइल नंबर दर्ज करें!");
-                return;
-            }
-
-            fetch(scriptURL + "?action=search&q=" + encodeURIComponent(query))
-            .then(response => response.json())
-            .then(data => {
-                let resultsDiv = document.getElementById("searchResults");
-                resultsDiv.innerHTML = "";
-
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = "<p>कोई डेटा नहीं मिला</p>";
-                } else {
-                    data.forEach(row => {
-                        resultsDiv.innerHTML += `<p><strong>नाम:</strong> ${row[1]}, <strong>मोबाइल:</strong> ${row[2]}, <strong>शेष राशि:</strong> ₹${row[7]}, <strong>रिमार्क:</strong> ${row[8]}</p>`;
-                    });
-                }
-                resultsDiv.style.display = "block";
-            })
-            .catch(error => alert("त्रुटि: " + error));
-        }
-    </script>
-
+  <div class="thankyou-box">
+    <h1>धन्यवाद!</h1>
+    <p>आपका फ़ॉर्म सफलतापूर्वक सबमिट हो गया है।</p>
+    <a href="https://cscinfo.github.io/index.html/">मुख्य पेज पर लौटें</a>
+  </div>
 </body>
 </html>
